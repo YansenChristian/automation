@@ -30,17 +30,17 @@ class WeekdoneClient:
         }
 
         result = self.oauthClient.sendPost(uri, body)
-        if result['status'] == "error":
+        if 'status' in result and result['status'] == "error":
             raise Exception(result)
         self.oauthVariables['access_token'] = result['access_token']
 
     def updateKeyResultProgress(self, objectiveId, keyResultId, progress):
-        uri = "/objective/" + objectiveId + "/result/" + keyResultId
+        uri = "/objective/" + str(objectiveId) + "/result/" + str(keyResultId)
         queryString = {
             'token': self.oauthVariables['access_token']
         }
         body = {
-            'progress': progress
+            'progress': int(progress)
         }
 
         result = self.apiClient.sendPost(uri, body, queryString)
