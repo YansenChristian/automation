@@ -1,5 +1,6 @@
 Flask==1.1.1
 Flask-RESTful==0.2.12
+Flask-Ext==0.1
 gunicorn==19.9.0
 Werkzeug==0.15.3
 python-dotenv==0.12.0
