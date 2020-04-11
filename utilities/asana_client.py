@@ -1,5 +1,6 @@
 from utilities.api_call import ApiCallHelper
 import utilities.datetime as DatetimeHelper
+import json
 
 class AsanaClient:
 	apiUrl = "https://app.asana.com/api/1.0"
@@ -51,7 +52,10 @@ class AsanaClient:
 			}
 		}
 
-		result = self.apiClient.sendPost(uri, body)
+		result = {}
+		if len(body['data']['actions']) != 0:
+			result = self.apiClient.sendPost(uri, json.dumps(body))
+
 		if 'errors' in result:
 			raise Exception(result['errors'])
 		return result
