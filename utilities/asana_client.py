@@ -11,7 +11,7 @@ class AsanaClient:
 		self.headers['Authorization'] = "Bearer 1/1141003277205677:a103bfc476557c49a672e6e4b828978f"
 		self.apiClient = ApiCallHelper(self.apiUrl, self.headers)
 
-	def getTodayTasksFromProject(self, projectId):
+	def getTasksFromProject(self, projectId, dueOnToday = False, completed = False):
 		uri = "/tasks"
 		queryString = {
 			"project" : projectId,
@@ -22,13 +22,32 @@ class AsanaClient:
 		if 'errors' in result:
 			raise Exception(result['errors'])
 
+		if not dueOnToday:
+			return result['data']
+
+		todayDate = DatetimeHelper.getTodayDateInFormat("%Y-%m-%d")
+		return list(filter(lambda task: task['due_on'] == todayDate, result['data']))
+
+	def getTasksFromSection(self, sectionId, dueOnToday = False):
+		uri = "/sections/"+ sectionId +"/tasks"
+		queryString = {
+			"opt_fields" : "due_on",
+			"completed_since" : "now"
+		}
+		result = self.apiClient.sendGet(uri, queryString)
+		if 'errors' in result:
+			raise Exception(result['errors'])
+
+		if not dueOnToday:
+			return result['data']
+
 		todayDate = DatetimeHelper.getTodayDateInFormat("%Y-%m-%d")
 		return list(filter(lambda task: task['due_on'] == todayDate, result['data']))
 
 	def moveTodayTasksAcrossProjects(self, sourceProjectId, destinationProjectId, destinationSectionId):
 		def prepareBatchActions(sourceProjectId, destinationProjectId,destinationSectionId):
 			actions = []
-			todayTasks = self.getTodayTasksFromProject(sourceProjectId)
+			todayTasks = self.getTasksFromProject(sourceProjectId, True)
 
 			for task in todayTasks:
 				actions.append({
@@ -63,6 +82,6 @@ class AsanaClient:
 AsanaClientInstance = None
 def getAsanaClient():
 	global AsanaClientInstance
-	if AsanaClientInstance == None:
+	if AsanaClientInstance is None:
 		AsanaClientInstance = AsanaClient()
 	return AsanaClientInstance

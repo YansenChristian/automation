@@ -52,6 +52,6 @@ class WeekdoneClient:
 WeekdoneClientInstance = None
 def getWeekDoneClient():
     global WeekdoneClientInstance
-    if WeekdoneClientInstance == None:
+    if WeekdoneClientInstance is None:
         WeekdoneClientInstance = WeekdoneClient()
     return WeekdoneClientInstance
