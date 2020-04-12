@@ -33,3 +33,8 @@ class ApiCallHelper:
 		return requests.post(self.baseApiUrl + uri + self.toQueryString(queryString),
 			data=body,
 			headers=self.getMergedHeaders(headers)).json()
+
+	def sendPatch(self, uri, body, queryString = {}, headers = {}):
+		return requests.patch(self.baseApiUrl + uri + self.toQueryString(queryString),
+			data=body,
+			headers=self.getMergedHeaders(headers)).json()
