@@ -12,6 +12,10 @@ class ZapierStorageClient:
 		self.headers['X-Secret'] = os.getenv("ZAPIER_STORAGE_SECRET")
 		self.apiClient = ApiCallHelper(self.apiUrl, self.headers)
 
+	def all(self):
+		result = self.apiClient.sendGet("", {})
+		return result
+
 	def get(self, key):
 		queryString = {
 			"key": key
@@ -39,6 +43,16 @@ class ZapierStorageClient:
 		for key in keys:
 			body[key] = None
 		return self.apiClient.sendPost("", json.dumps(body))
+
+	def increaseValue(self, key, amount):
+		body = {
+			'action': 'increment_by',
+			'data': {
+				'key': key,
+				'amount': amount
+			}
+		}
+		return self.apiClient.sendPatch("", json.dumps(body))
 
 
 ZapierStorageClientInstance = None
