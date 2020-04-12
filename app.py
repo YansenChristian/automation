@@ -27,10 +27,12 @@ load_dotenv()
 from routes.health_check_blueprint import HealthCheckBlueprint
 from routes.weekdone_blueprint import WeekdoneBlueprint
 from routes.asana_blueprint import AsanaBlueprint
+from routes.zapier_storage_blueprint import ZapierStorageBlueprint
 
 app.register_blueprint(HealthCheckBlueprint)
 app.register_blueprint(WeekdoneBlueprint)
 app.register_blueprint(AsanaBlueprint)
+app.register_blueprint(ZapierStorageBlueprint)
 
 
 
