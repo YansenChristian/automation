@@ -23,6 +23,14 @@ class ZapierStorageClient:
 		result = self.apiClient.sendGet("", queryString)
 		return result[key] if key in result else None
 
+	def getBulk(self, keys):
+		queryString = {
+			"key[]": keys
+		}
+		print(queryString)
+		result = self.apiClient.sendGet("", queryString)
+		return result
+
 	def set(self, key, value):
 		body = {
 			key: value
