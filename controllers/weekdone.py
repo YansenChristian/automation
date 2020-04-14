@@ -5,5 +5,8 @@ from flask_restful import Resource
 
 class SyncKeyResults(Resource):
     def post(self):
-        data = weekdoneService.syncProductivityWithGoalify()
-        return response.returnData(200, data), 200
+        data = []
+        data.append(weekdoneService.syncProductivityWithGoalify())
+        data.append(weekdoneService.syncDisciplineWithGoalify())
+        data.append(weekdoneService.syncCommitmentWithGoalify())
+        return response.returnData(200, data)
