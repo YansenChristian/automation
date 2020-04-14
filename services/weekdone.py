@@ -43,8 +43,8 @@ def syncCommitmentWithGoalify():
         if totalTasks == 0:
             return 0
         return int(numberOfCompletedTasks / totalTasks * 100)
-    numberOfCompletedTasks = data[completedTasksKey] if completedTasksKey in data else 0
-    totalTasks = data[totalTasksKey] if totalTasksKey in data else 0
+    numberOfCompletedTasks = len(data[completedTasksKey]) if completedTasksKey in data else 0
+    totalTasks = len(data[totalTasksKey]) if totalTasksKey in data else 0
 
     weekdoneClient = getWeekDoneClient()
     objectiveId = constants.weekdone.OBJECTIVES['Time Management']['id']
