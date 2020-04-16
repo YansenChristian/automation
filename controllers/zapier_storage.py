@@ -12,13 +12,8 @@ class IncreaseTodayTasksCounterByOne(Resource):
 
 		todayDate = DatetimeHelper.getTodayDateInFormat("%Y-%m-%d")
 		zapierStorageClient = getZapierStorageClient()
-		tasks = zapierStorageClient.get(todayDate +"[TotalTasks]")
-
-		tasks = tasks if tasks is not None else {}
-		tasks[payloads['task_gid']] = True
-		data = zapierStorageClient.set(todayDate +"[TotalTasks]", tasks)
-
-		return response.returnData(200, data)
+		result = zapierStorageClient.appendUniqueValuesToKey(todayDate + "[TotalTasks]", [payloads['task_gid']])
+		return response.returnData(200, result)
 
 
 class IncreaseTodayCompletedTasksCounterByOne(Resource):
@@ -29,10 +24,5 @@ class IncreaseTodayCompletedTasksCounterByOne(Resource):
 
 		todayDate = DatetimeHelper.getTodayDateInFormat("%Y-%m-%d")
 		zapierStorageClient = getZapierStorageClient()
-		tasks = zapierStorageClient.get(todayDate +"[CompletedTasks]")
-
-		tasks = tasks if tasks is not None else {}
-		tasks[payloads['task_gid']] = True
-		data = zapierStorageClient.set(todayDate +"[CompletedTasks]", tasks)
-
-		return response.returnData(200, data)
+		result = zapierStorageClient.appendUniqueValuesToKey(todayDate + "[CompletedTasks]", [payloads['task_gid']])
+		return response.returnData(200, result)

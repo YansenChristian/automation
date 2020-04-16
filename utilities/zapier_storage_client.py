@@ -62,6 +62,17 @@ class ZapierStorageClient:
 		}
 		return self.apiClient.sendPatch("", json.dumps(body))
 
+	def appendUniqueValuesToKey(self, key, values = []):
+		if len(values) < 1:
+			return []
+		data = self.get(key)
+		data = data if data is not None else {}
+		for value in values:
+			data[value] = True
+		return self.set(key, data)
+
+
+
 
 ZapierStorageClientInstance = None
 def getZapierStorageClient():

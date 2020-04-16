@@ -44,40 +44,19 @@ class AsanaClient:
 		todayDate = DatetimeHelper.getTodayDateInFormat("%Y-%m-%d")
 		return list(filter(lambda task: task['due_on'] == todayDate, result['data']))
 
-	def moveTodayTasksAcrossProjects(self, sourceProjectId, destinationProjectId, destinationSectionId):
-		def prepareBatchActions(sourceProjectId, destinationProjectId,destinationSectionId):
-			actions = []
-			todayTasks = self.getTasksFromProject(sourceProjectId, True)
-
-			for task in todayTasks:
-				actions.append({
-					"relative_path": "/tasks/" + str(task['gid']) + "/addProject",
-					"method": "post",
-					"data": {
-						"project": destinationProjectId,
-						"section": destinationSectionId
-					}
-				})
-			return actions
+	def sendBatchRequest(self, actions = []):
+		if len(actions) < 1:
+			return []
 
 		uri = "/batch"
 		body = {
 			"data": {
-				"actions": prepareBatchActions(
-					sourceProjectId,
-					destinationProjectId,
-					destinationSectionId
-				)
+				"actions": actions
 			}
 		}
-
-		result = {}
-		if len(body['data']['actions']) != 0:
-			result = self.apiClient.sendPost(uri, json.dumps(body))
-
-		if 'errors' in result:
-			raise Exception(result['errors'])
+		result = self.apiClient.sendPost(uri, json.dumps(body))
 		return result
+
 
 AsanaClientInstance = None
 def getAsanaClient():
