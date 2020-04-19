@@ -27,7 +27,6 @@ class ZapierStorageClient:
 		queryString = {
 			"key[]": keys
 		}
-		print(queryString)
 		result = self.apiClient.sendGet("", queryString)
 		return result
 
