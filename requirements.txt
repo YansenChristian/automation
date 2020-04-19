@@ -13,3 +13,4 @@ pytz==2019.3
 setuptools==41.2.0
 six==1.14.0
 requests==2.23.0
+databox==2.1.4
