@@ -4,6 +4,7 @@ def returnMessage(statusCode, message):
         "message": message
     }, statusCode
 
+
 def returnData(statusCode, data):
     return {
         "status": statusCode,

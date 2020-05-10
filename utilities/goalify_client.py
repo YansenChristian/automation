@@ -18,6 +18,7 @@ class GoalifyClient:
 		result = self.apiClient.sendGet(uri, queryString)
 		return result['result']['goal']['kpi']['perf_d_1']
 
+
 GoalifyClientInstance = None
 def getGoalifyClient():
 	global GoalifyClientInstance

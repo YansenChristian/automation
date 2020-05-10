@@ -71,8 +71,6 @@ class ZapierStorageClient:
 		return self.set(key, data)
 
 
-
-
 ZapierStorageClientInstance = None
 def getZapierStorageClient():
 	global ZapierStorageClientInstance

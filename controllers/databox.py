@@ -4,6 +4,7 @@ from utilities.databox_client import getDataboxClient
 from flask_restful import Resource
 from models.databox import Metric
 
+
 class SyncMetric(Resource):
     def post(self):
         data = []

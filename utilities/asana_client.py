@@ -2,6 +2,7 @@ from utilities.api_call import ApiCallHelper
 import utilities.datetime as DatetimeHelper
 import json
 
+
 class AsanaClient:
 	apiUrl = "https://app.asana.com/api/1.0"
 	headers = {}
@@ -11,7 +12,7 @@ class AsanaClient:
 		self.headers['Authorization'] = "Bearer 1/1141003277205677:a103bfc476557c49a672e6e4b828978f"
 		self.apiClient = ApiCallHelper(self.apiUrl, self.headers)
 
-	def getTasksFromProject(self, projectId, dueOnToday = False, completed = False):
+	def getTasksFromProject(self, projectId, dueOnToday = False):
 		uri = "/tasks"
 		queryString = {
 			"project" : projectId,
@@ -29,9 +30,9 @@ class AsanaClient:
 		return list(filter(lambda task: task['due_on'] == todayDate, result['data']))
 
 	def getTasksFromSection(self, sectionId, dueOnToday = False):
-		uri = "/sections/"+ sectionId +"/tasks"
+		uri = "/sections/" + sectionId + "/tasks"
 		queryString = {
-			"opt_fields" : "due_on",
+			"opt_fields" : "due_on,name",
 			"completed_since" : "now"
 		}
 		result = self.apiClient.sendGet(uri, queryString)

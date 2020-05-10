@@ -3,7 +3,7 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
-# ================= DEFINE ERROR HANLDERS ================== #
+# ================= DEFINE ERROR HANDLERS ================== #
 
 @app.errorhandler(404)
 def invalidRoute(e):
