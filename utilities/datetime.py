@@ -1,9 +1,8 @@
 import datetime
 
 
-def getTodayDateInFormat(dateTimeFormat):
+def getTodayDateInStringFormat(dateTimeFormat):
 	nowDateTime = datetime.datetime.now()
-	nowDateTime += datetime.timedelta(hours=7)
 	return nowDateTime.strftime(dateTimeFormat)
 
 
