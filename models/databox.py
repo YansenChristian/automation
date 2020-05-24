@@ -6,7 +6,7 @@ class Metric:
 		self.key = key
 		self.value = value
 		self.unit = unit
-		self.date = date if date is not None else DatetimeHelper.getTodayDateInFormat("%Y-%m-%d")
+		self.date = date if date is not None else DatetimeHelper.getTodayDateInStringFormat("%Y-%m-%d")
 		self.category = category
 
 	def toDictionary(self):

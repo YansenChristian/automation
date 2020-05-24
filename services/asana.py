@@ -24,7 +24,7 @@ def moveTodayTasksAcrossProjects(sourceProjectId, destinationProjectId, destinat
 	results.append(asanaClient.sendBatchRequest(actions))
 
 	zapierStorageClient = getZapierStorageClient()
-	todayDate = DatetimeHelper.getTodayDateInFormat("%Y-%m-%d")
+	todayDateString = DatetimeHelper.getTodayDateInStringFormat("%Y-%m-%d")
 	todayTaskGids = [task['gid'] for task in todayTasks]
-	results.append(zapierStorageClient.appendUniqueValuesToKey(todayDate + "[TotalTasks]", todayTaskGids))
+	results.append(zapierStorageClient.appendUniqueValuesToKey(todayDateString + "[TotalTasks]", todayTaskGids))
 	return results

@@ -10,9 +10,9 @@ class IncreaseTodayTasksCounterByOne(Resource):
 		parser.add_argument('task_gid', type=str)
 		payloads = parser.parse_args()
 
-		todayDate = DatetimeHelper.getTodayDateInFormat("%Y-%m-%d")
+		todayDateString = DatetimeHelper.getTodayDateInStringFormat("%Y-%m-%d")
 		zapierStorageClient = getZapierStorageClient()
-		result = zapierStorageClient.appendUniqueValuesToKey(todayDate + "[TotalTasks]", [payloads['task_gid']])
+		result = zapierStorageClient.appendUniqueValuesToKey(todayDateString + "[TotalTasks]", [payloads['task_gid']])
 		return response.returnData(200, result)
 
 
@@ -22,7 +22,7 @@ class IncreaseTodayCompletedTasksCounterByOne(Resource):
 		parser.add_argument('task_gid', type=str)
 		payloads = parser.parse_args()
 
-		todayDate = DatetimeHelper.getTodayDateInFormat("%Y-%m-%d")
+		todayDateString = DatetimeHelper.getTodayDateInStringFormat("%Y-%m-%d")
 		zapierStorageClient = getZapierStorageClient()
-		result = zapierStorageClient.appendUniqueValuesToKey(todayDate + "[CompletedTasks]", [payloads['task_gid']])
+		result = zapierStorageClient.appendUniqueValuesToKey(todayDateString + "[CompletedTasks]", [payloads['task_gid']])
 		return response.returnData(200, result)

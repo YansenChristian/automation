@@ -26,8 +26,8 @@ class AsanaClient:
 		if not dueOnToday:
 			return result['data']
 
-		todayDate = DatetimeHelper.getTodayDateInFormat("%Y-%m-%d")
-		return list(filter(lambda task: task['due_on'] == todayDate, result['data']))
+		todayDateString = DatetimeHelper.getTodayDateInStringFormat("%Y-%m-%d")
+		return list(filter(lambda task: task['due_on'] == todayDateString, result['data']))
 
 	def getTasksFromSection(self, sectionId, dueOnToday = False):
 		uri = "/sections/" + sectionId + "/tasks"
@@ -42,8 +42,8 @@ class AsanaClient:
 		if not dueOnToday:
 			return result['data']
 
-		todayDate = DatetimeHelper.getTodayDateInFormat("%Y-%m-%d")
-		return list(filter(lambda task: task['due_on'] == todayDate, result['data']))
+		todayDateString = DatetimeHelper.getTodayDateInStringFormat("%Y-%m-%d")
+		return list(filter(lambda task: task['due_on'] == todayDateString, result['data']))
 
 	def sendBatchRequest(self, actions = []):
 		if len(actions) < 1:
