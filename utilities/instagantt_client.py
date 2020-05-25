@@ -27,6 +27,8 @@ class InstaganttClient:
             'redirect_uri': "https://app.instagantt.com/asana/auth",
         }
         result = self.oauthClient.sendGet(uri, queryString)
+        if result is None:
+            return ""
 
         connectSId = result.headers['Set-Cookie']
         self.headers['Cookie'] = connectSId[:connectSId.find(';')]
@@ -39,6 +41,8 @@ class InstaganttClient:
             queryString['completed_since'] = '16758797247900'
 
         result = self.apiClient.sendGet(uri, queryString)
+        if result is None:
+            return {}
         return result.json()
 
 

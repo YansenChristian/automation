@@ -23,8 +23,11 @@ class GoogleCalendarClient:
         }
 
         result = self.oauthClient.sendPost(uri, {}, queryString)
+        if result is None:
+            raise Exception("Failed to refresh google calendar's access token")
+
         responseData = result.json()
-        if 'error' in responseData:
+        if ('error' in responseData) or ('access_token' not in responseData):
             raise Exception(responseData)
         self.apiClient.headers['Authorization'] = "Bearer " + responseData['access_token']
 
@@ -36,6 +39,9 @@ class GoogleCalendarClient:
         }
 
         result = self.apiClient.sendGet(uri, queryString)
+        if result is None:
+            return {}
+
         responseData = result.json()
         if 'error' in responseData:
             raise Exception(responseData)

@@ -24,9 +24,13 @@ class WeekdoneClient:
         }
 
         result = self.oauthClient.sendPost(uri, body)
-        if 'status' in result and result['status'] == "error":
-            raise Exception(result)
-        self.apiClient.headers['Authorization'] = result['access_token']
+        if result is None:
+            raise Exception("Failed to refresh weekdone's access token")
+
+        responseData = result.json()
+        if ('status' in responseData and responseData['status'] == "error") or ('access_token' not in responseData):
+            raise Exception(responseData)
+        self.apiClient.headers['Authorization'] = responseData['access_token']
 
     def updateKeyResultProgress(self, objectiveId, keyResultId, progress):
         uri = "/objective/" + str(objectiveId) + "/result/" + str(keyResultId)
@@ -38,9 +42,13 @@ class WeekdoneClient:
         }
 
         result = self.apiClient.sendPost(uri, body, queryString)
-        if result['status'] == "error":
-            raise Exception(result)
-        return result
+        if result is None:
+            raise Exception("Failed to refresh weekdone's access token")
+
+        responseData = result.json()
+        if 'status' in responseData and responseData['status'] == "error":
+            raise Exception(responseData)
+        return responseData
 
 
 WeekdoneClientInstance = None

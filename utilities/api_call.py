@@ -26,17 +26,15 @@ class ApiCallHelper:
 		return headers
 
 	def sendGet(self, uri, queryString = {}, headers = {}):
-		response = requests.get(self.baseApiUrl + uri + self.toQueryString(queryString),
+		return requests.get(self.baseApiUrl + uri + self.toQueryString(queryString),
 			headers=self.getMergedHeaders(headers))
-		return response if response is not None else {}
 
 	def sendPost(self, uri, body, queryString = {}, headers = {}):
-		response = requests.post(self.baseApiUrl + uri + self.toQueryString(queryString),
+		return requests.post(self.baseApiUrl + uri + self.toQueryString(queryString),
 			data=body,
 			headers=self.getMergedHeaders(headers))
-		return response if response is not None else {}
 
 	def sendPatch(self, uri, body, queryString = {}, headers = {}):
 		return requests.patch(self.baseApiUrl + uri + self.toQueryString(queryString),
 			data=body,
-			headers=self.getMergedHeaders(headers)).json()
+			headers=self.getMergedHeaders(headers))

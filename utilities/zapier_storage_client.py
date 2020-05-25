@@ -14,42 +14,60 @@ class ZapierStorageClient:
 
 	def all(self):
 		result = self.apiClient.sendGet("", {})
-		return result
+		if result is None:
+			return {}
+		return result.json()
 
 	def get(self, key):
 		queryString = {
 			"key": key
 		}
 		result = self.apiClient.sendGet("", queryString)
-		return result[key] if key in result else None
+		if (result is None) or (key not in result):
+			return None
+		return result[key]
 
 	def getBulk(self, keys):
 		queryString = {
 			"key[]": keys
 		}
 		result = self.apiClient.sendGet("", queryString)
-		return result
+		if result is None:
+			return {}
+		return result.json()
 
 	def set(self, key, value):
 		body = {
 			key: value
 		}
-		return self.apiClient.sendPost("", json.dumps(body))
+		result = self.apiClient.sendPost("", json.dumps(body))
+		if result is None:
+			return {}
+		return result.json()
 
 	def setBulk(self, data):
-		return self.apiClient.sendPost("", json.dumps(data))
+		result = self.apiClient.sendPost("", json.dumps(data))
+		if result is None:
+			return {}
+		return result.json()
 
 	def unset(self, key):
 		body = {
 			key: None
 		}
-		return self.apiClient.sendPost("", json.dumps(body))
+		result = self.apiClient.sendPost("", json.dumps(body))
+		if result is None:
+			return {}
+		return result.json()
 
 	def unsetBulk(self, *keys):
 		body = {}
 		for key in keys:
 			body[key] = None
-		return self.apiClient.sendPost("", json.dumps(body))
+		result = self.apiClient.sendPost("", json.dumps(body))
+		if result is None:
+			return {}
+		return result.json()
 
 	def increaseValue(self, key, amount):
 		body = {
@@ -59,7 +77,10 @@ class ZapierStorageClient:
 				'amount': amount
 			}
 		}
-		return self.apiClient.sendPatch("", json.dumps(body))
+		result = self.apiClient.sendPatch("", json.dumps(body))
+		if result is None:
+			return {}
+		return result.json()
 
 	def appendUniqueValuesToKey(self, key, values = []):
 		if len(values) < 1:

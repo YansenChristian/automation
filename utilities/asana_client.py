@@ -5,64 +5,74 @@ from utilities.api_call import ApiCallHelper
 
 
 class AsanaClient:
-	apiUrl = "https://app.asana.com/api/1.0"
-	headers = {}
-	apiClient = None
+    apiUrl = "https://app.asana.com/api/1.0"
+    headers = {}
+    apiClient = None
 
-	def __init__(self):
-		self.headers['Authorization'] = "Bearer " + os.getenv("ASANA_ACCESS_TOKEN")
-		self.apiClient = ApiCallHelper(self.apiUrl, self.headers)
+    def __init__(self):
+        self.headers['Authorization'] = "Bearer " + os.getenv("ASANA_ACCESS_TOKEN")
+        self.apiClient = ApiCallHelper(self.apiUrl, self.headers)
 
-	def getTasksFromProject(self, projectId, dueOnToday = False):
-		uri = "/tasks"
-		queryString = {
-			"project" : projectId,
-			"opt_fields" : "due_on",
-			"completed_since" : "now"
-		}
-		result = self.apiClient.sendGet(uri, queryString)
-		if 'errors' in result:
-			raise Exception(result['errors'])
+    def getTasksFromProject(self, projectId, dueOnToday=False):
+        uri = "/tasks"
+        queryString = {
+            "project": projectId,
+            "opt_fields": "due_on",
+            "completed_since": "now"
+        }
+        result = self.apiClient.sendGet(uri, queryString)
+        if (result is None) or ('data' not in result):
+            return []
 
-		if not dueOnToday:
-			return result['data']
+        if 'errors' in result:
+            raise Exception(result['errors'])
 
-		todayDateString = DatetimeHelper.getTodayDateInStringFormat("%Y-%m-%d")
-		return list(filter(lambda task: task['due_on'] == todayDateString, result['data']))
+        if not dueOnToday:
+            return result['data']
 
-	def getTasksFromSection(self, sectionId, dueOnToday = False):
-		uri = "/sections/" + sectionId + "/tasks"
-		queryString = {
-			"opt_fields" : "due_on,name",
-			"completed_since" : "now"
-		}
-		result = self.apiClient.sendGet(uri, queryString)
-		if 'errors' in result:
-			raise Exception(result['errors'])
+        todayDateString = DatetimeHelper.getTodayDateInStringFormat("%Y-%m-%d")
+        return list(filter(lambda task: task['due_on'] == todayDateString, result['data']))
 
-		if not dueOnToday:
-			return result['data']
+    def getTasksFromSection(self, sectionId, dueOnToday=False):
+        uri = "/sections/" + sectionId + "/tasks"
+        queryString = {
+            "opt_fields": "due_on,name",
+            "completed_since": "now"
+        }
+        result = self.apiClient.sendGet(uri, queryString)
+        if (result is None) or ('data' not in result):
+            return []
 
-		todayDateString = DatetimeHelper.getTodayDateInStringFormat("%Y-%m-%d")
-		return list(filter(lambda task: task['due_on'] == todayDateString, result['data']))
+        if 'errors' in result:
+            raise Exception(result['errors'])
 
-	def sendBatchRequest(self, actions = []):
-		if len(actions) < 1:
-			return []
+        if not dueOnToday:
+            return result['data']
 
-		uri = "/batch"
-		body = {
-			"data": {
-				"actions": actions
-			}
-		}
-		result = self.apiClient.sendPost(uri, json.dumps(body))
-		return result
+        todayDateString = DatetimeHelper.getTodayDateInStringFormat("%Y-%m-%d")
+        return list(filter(lambda task: task['due_on'] == todayDateString, result['data']))
+
+    def sendBatchRequest(self, actions=[]):
+        if len(actions) < 1:
+            return []
+
+        uri = "/batch"
+        body = {
+            "data": {
+                "actions": actions
+            }
+        }
+        result = self.apiClient.sendPost(uri, json.dumps(body))
+        if result is None:
+            return {}
+        return result.json()
 
 
 AsanaClientInstance = None
+
+
 def getAsanaClient():
-	global AsanaClientInstance
-	if AsanaClientInstance is None:
-		AsanaClientInstance = AsanaClient()
-	return AsanaClientInstance
+    global AsanaClientInstance
+    if AsanaClientInstance is None:
+        AsanaClientInstance = AsanaClient()
+    return AsanaClientInstance
