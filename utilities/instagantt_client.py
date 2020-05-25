@@ -31,11 +31,12 @@ class InstaganttClient:
         self.headers['Cookie'] = connectSId[:connectSId.find(';')]
         return self.headers['Cookie']
 
-    def getAllTasks(self):
-        uri = "/projects/" + constants.instagantt.PROJECTS['Overall']['gid'] + "/tasks"
-        queryString = {
-            'completed_since': '16758797247900'
-        }
+    def getAllTasks(self, withCompletedTask = False):
+        uri = "/projects/" + constants.instagantt.CONNECTIONS['Overall']['gid'] + "/tasks"
+        queryString = {}
+        if not withCompletedTask:
+            queryString['completed_since'] = '16758797247900'
+
         result = self.apiClient.sendGet(uri, queryString)
         return result.json()
 
