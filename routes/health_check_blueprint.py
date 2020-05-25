@@ -7,5 +7,5 @@ HealthCheckBlueprint = Blueprint('user', __name__, url_prefix=ApiUrl)
 HealthCheckApiBlueprint = Api(HealthCheckBlueprint)
 
 
-from controllers.health_check import Check
-HealthCheckApiBlueprint.add_resource(Check, "")
+import controllers.health_check as HealthCheckController
+HealthCheckApiBlueprint.add_resource(HealthCheckController.Check, "")

@@ -1,7 +1,7 @@
-from datetime import datetime
-from utilities.google_calendar_client import getGoogleCalendarClient
 import utilities.datetime as DatetimeHelper
 import constants.google_calendar
+from datetime import datetime
+from utilities.google_calendar_client import getGoogleCalendarClient
 
 
 def Run():

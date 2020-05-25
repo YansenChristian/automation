@@ -1,7 +1,7 @@
 import utilities.http_response as response
+import utilities.datetime as DatetimeHelper
 from utilities.zapier_storage_client import getZapierStorageClient
 from flask_restful import Resource, reqparse
-import utilities.datetime as DatetimeHelper
 
 
 class IncreaseTodayTasksCounterByOne(Resource):

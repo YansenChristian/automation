@@ -1,5 +1,6 @@
-from utilities.api_call import ApiCallHelper
+import os
 import constants.instagantt
+from utilities.api_call import ApiCallHelper
 
 
 class InstaganttClient:
@@ -11,9 +12,9 @@ class InstaganttClient:
     oauthClient = None
 
     def __init__(self):
-        self.oauthHeaders['Cookie'] = "user=1141003277205677; " \
-                                      "auth_token=50f951ca38605b230898d4b859d25587; " \
-                                      "ticket=888e17e97434bb2320d096dec49fdb7eae382590b556f130555d0e2d1561dab1;"
+        self.oauthHeaders['Cookie'] = "user=" + os.getenv("INSTAGANTT_USER_ID") + "; " \
+                                      "auth_token=" + os.getenv("INSTAGANTT_AUTHENTICATION_TOKEN") + "; " \
+                                      "ticket=" + os.getenv("INSTAGANTT_TICKET") + ";"
         self.apiClient = ApiCallHelper(self.apiUrl, self.headers)
         self.oauthClient = ApiCallHelper(self.oauthUrl, self.oauthHeaders)
         self.__refreshConnectSId()
@@ -22,7 +23,7 @@ class InstaganttClient:
         uri = "/-/oauth_authorize"
         queryString = {
             'response_type': "code",
-            'client_id': "5275785675948",
+            'client_id': os.getenv("INSTAGANTT_CLIENT_ID"),
             'redirect_uri': "https://app.instagantt.com/asana/auth",
         }
         result = self.oauthClient.sendGet(uri, queryString)

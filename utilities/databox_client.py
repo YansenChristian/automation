@@ -1,5 +1,6 @@
 from databox import Client
 
+
 DataboxClientInstance = None
 def getDataboxClient(token):
 	global DataboxClientInstance

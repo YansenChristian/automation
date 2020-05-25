@@ -7,5 +7,5 @@ AsanaBlueprint = Blueprint('asana', __name__, url_prefix=ApiUrl)
 AsanaApiBlueprint = Api(AsanaBlueprint)
 
 
-from controllers.asana import MoveTodayRoutinityTasksToOverview
-AsanaApiBlueprint.add_resource(MoveTodayRoutinityTasksToOverview, "/move-routinity-to-overview")
+import controllers.asana as AsanaController
+AsanaApiBlueprint.add_resource(AsanaController.MoveTodayRoutinityTasksToOverview, "/move-routinity-to-overview")

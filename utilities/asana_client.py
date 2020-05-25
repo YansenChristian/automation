@@ -1,6 +1,7 @@
-from utilities.api_call import ApiCallHelper
-import utilities.datetime as DatetimeHelper
+import os
 import json
+import utilities.datetime as DatetimeHelper
+from utilities.api_call import ApiCallHelper
 
 
 class AsanaClient:
@@ -9,7 +10,7 @@ class AsanaClient:
 	apiClient = None
 
 	def __init__(self):
-		self.headers['Authorization'] = "Bearer 1/1141003277205677:a103bfc476557c49a672e6e4b828978f"
+		self.headers['Authorization'] = "Bearer " + os.getenv("ASANA_ACCESS_TOKEN")
 		self.apiClient = ApiCallHelper(self.apiUrl, self.headers)
 
 	def getTasksFromProject(self, projectId, dueOnToday = False):

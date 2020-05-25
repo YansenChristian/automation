@@ -1,3 +1,5 @@
+import os
+
 from utilities.api_call import ApiCallHelper
 
 class GoalifyClient:
@@ -6,7 +8,7 @@ class GoalifyClient:
 	apiClient = None
 
 	def __init__(self):
-		self.headers['Authorization'] = "Bearer W8At9FlplrRklKKA_cGF-WknTu-RnFGqDs9ZhxDn"
+		self.headers['Authorization'] = "Bearer " + os.getenv("GOALIFY_ACCESS_TOKEN")
 		self.apiClient = ApiCallHelper(self.apiUrl, self.headers)
 
 	def getGoalProgress(self, goalId):

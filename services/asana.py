@@ -1,6 +1,6 @@
+import utilities.datetime as DatetimeHelper
 from utilities.zapier_storage_client import getZapierStorageClient
 from utilities.asana_client import getAsanaClient
-import utilities.datetime as DatetimeHelper
 
 
 def moveTodayTasksAcrossProjects(sourceProjectId, destinationProjectId, destinationSectionId):

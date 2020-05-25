@@ -7,5 +7,5 @@ InstaganttBlueprint = Blueprint('instagantt', __name__, url_prefix=ApiUrl)
 InstaganttApiBlueprint = Api(InstaganttBlueprint)
 
 
-from controllers.instagantt import GetAllTasks
-InstaganttApiBlueprint.add_resource(GetAllTasks, "/tasks")
+import controllers.instagantt as InstaganttController
+InstaganttApiBlueprint.add_resource(InstaganttController.GetAllTasks, "/tasks")
