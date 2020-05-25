@@ -7,5 +7,5 @@ DataboxBlueprint = Blueprint('databox', __name__, url_prefix=ApiUrl)
 DataboxApiBlueprint = Api(DataboxBlueprint)
 
 
-from controllers.databox import SyncMetric
-DataboxApiBlueprint.add_resource(SyncMetric, "/sync")
+import controllers.databox as DataboxController
+DataboxApiBlueprint.add_resource(DataboxController.SyncProductivityMetrics, "/productivity/sync")

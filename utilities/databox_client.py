@@ -1,8 +1,8 @@
 from databox import Client
 
 DataboxClientInstance = None
-def getDataboxClient():
+def getDataboxClient(token):
 	global DataboxClientInstance
 	if DataboxClientInstance is None:
-		DataboxClientInstance = Client('k2kirto2l6jfcap29sroae')
+		DataboxClientInstance = Client(token)
 	return DataboxClientInstance
