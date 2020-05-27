@@ -6,8 +6,10 @@ from utilities.google_calendar_client import getGoogleCalendarClient
 
 def Run():
     todayDate = DatetimeHelper.getTodayDateInStringFormat("%Y-%m-%d")
-    beginningOfDayPostfix = "T00:00:00Z"
-    endOfDayPostfix = "T23:59:59Z"
+    # %2B is an encoding of `+`
+    asiaJakartaTimeZone = "%2B07:00"
+    beginningOfDayPostfix = "T00:00:00" + asiaJakartaTimeZone
+    endOfDayPostfix = "T23:59:59" + asiaJakartaTimeZone
 
     googleCalendarClient = getGoogleCalendarClient()
     result = googleCalendarClient.getEventsForDatetimeRange(
