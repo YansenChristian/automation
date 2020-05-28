@@ -24,7 +24,6 @@ def filterTask(task):
     if ('type' in task) \
             or ('start' not in task) \
             or ('due' not in task) \
-            or ('completed' not in task) \
             or ('estimated_hours' not in task) \
             or ('is_milestone' not in task) \
             or (task['start'] == "") \
@@ -37,8 +36,5 @@ def filterTask(task):
     dueDate = datetime.strptime(task['due'], '%Y-%m-%d')
 
     if (todayDate < startDate) or (todayDate > dueDate):
-        return False
-
-    if (dueDate == todayDate) and (task['completed'] == ""):
         return False
     return True
