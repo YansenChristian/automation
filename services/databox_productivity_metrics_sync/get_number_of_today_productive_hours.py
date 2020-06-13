@@ -1,40 +1,29 @@
-from datetime import datetime
 import utilities.datetime as DatetimeHelper
+import constants.google_calendar
+from datetime import datetime
+from utilities.google_calendar_client import getGoogleCalendarClient
 
 
-def Run(tasks, numberOfDistractionsHour):
-    filteredTasks = list(filter(filterTask, tasks))
-    numberOfTasksHour = calculateTodayTasksHour(filteredTasks)
-    return numberOfTasksHour - float(numberOfDistractionsHour)
+def Run():
+    dailyTasks = getDailyTasksFromGoogleCalendar()
+    totalHours = float(0)
+    for event in dailyTasks:
+        startDatetime = datetime.fromisoformat(event['start']['dateTime'])
+        endDatetime = datetime.fromisoformat(event['end']['dateTime'])
+        totalHours += (endDatetime - startDatetime).seconds / 3600
+    return totalHours
 
 
-def calculateTodayTasksHour(filteredTasks):
-    numberOfTodayTasksHour = float(0)
-    for task in filteredTasks:
-        startDate = datetime.strptime(task['start'], '%Y-%m-%d')
-        dueDate = datetime.strptime(task['due'], '%Y-%m-%d')
+def getDailyTasksFromGoogleCalendar():
+    todayDate = DatetimeHelper.getTodayDateInStringFormat("%Y-%m-%d")
+    # %2B is an encoding of `+`
+    asiaJakartaTimeZone = "%2B07:00"
+    beginningOfDayPostfix = "T00:00:00" + asiaJakartaTimeZone
+    endOfDayPostfix = "T23:59:59" + asiaJakartaTimeZone
 
-        workingDays = (dueDate - startDate).days + 1
-        estimatedHours = task['estimated_hours'] if task['estimated_hours'] != "" else 0
-        numberOfTodayTasksHour += (float(estimatedHours) / 100) / float(workingDays)
-    return numberOfTodayTasksHour
-
-
-def filterTask(task):
-    if ('type' in task) \
-            or ('start' not in task) \
-            or ('due' not in task) \
-            or ('estimated_hours' not in task) \
-            or ('is_milestone' not in task) \
-            or (task['start'] == "") \
-            or (task['due'] == "") \
-            or (task['is_milestone'] != ""):
-        return False
-
-    todayDate = datetime.strptime(DatetimeHelper.getTodayDateInStringFormat('%Y-%m-%d'), '%Y-%m-%d')
-    startDate = datetime.strptime(task['start'], '%Y-%m-%d')
-    dueDate = datetime.strptime(task['due'], '%Y-%m-%d')
-
-    if (todayDate < startDate) or (todayDate > dueDate):
-        return False
-    return True
+    googleCalendarClient = getGoogleCalendarClient()
+    return googleCalendarClient.getEventsForDatetimeRange(
+        constants.google_calendar.CALENDARS['Daily Tasks']['id'],
+        todayDate + beginningOfDayPostfix,
+        todayDate + endOfDayPostfix
+    )['items']
