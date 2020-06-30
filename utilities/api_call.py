@@ -1,4 +1,5 @@
 import requests
+import json
 
 class ApiCallHelper:
 	baseApiUrl = ""
@@ -38,3 +39,11 @@ class ApiCallHelper:
 		return requests.patch(self.baseApiUrl + uri + self.toQueryString(queryString),
 			data=body,
 			headers=self.getMergedHeaders(headers))
+
+
+def isJson(responseBody):
+	try:
+		json.loads(responseBody)
+	except ValueError:
+		return False
+	return True

@@ -1,6 +1,7 @@
 import os
 import constants.instagantt
 from utilities.api_call import ApiCallHelper
+import utilities.api_call
 
 
 class InstaganttClient:
@@ -41,8 +42,9 @@ class InstaganttClient:
             queryString['completed_since'] = '16758797247900'
 
         result = self.apiClient.sendGet(uri, queryString)
-        if result is None:
-            return {}
+        #TODO: Log API call request & response
+        if not utilities.api_call.isJson(result.content):
+            raise Exception("Invalid response body: " + str(result.content))
         return result.json()
 
 
