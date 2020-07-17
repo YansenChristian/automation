@@ -6,7 +6,7 @@ Logger = None
 def getLogger():
     global Logger
 
-    syslog = SysLogHandler(address='/var/run/syslog')
+    syslog = SysLogHandler(address=('logs6.papertrailapp.com', 33527))
     syslog.setFormatter(
         logging.Formatter(
             '%(asctime)s %(levelname)s : %(message)s',
