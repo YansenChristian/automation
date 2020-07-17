@@ -29,8 +29,6 @@ class GoalifyClient:
 
 
 GoalifyClientInstance = None
-
-
 def getGoalifyClient():
     global GoalifyClientInstance
     if GoalifyClientInstance is None:

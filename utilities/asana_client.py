@@ -69,8 +69,6 @@ class AsanaClient:
 
 
 AsanaClientInstance = None
-
-
 def getAsanaClient():
     global AsanaClientInstance
     if AsanaClientInstance is None:
