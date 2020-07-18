@@ -4,14 +4,26 @@ import services.databox_productivity_metrics_sync.get_today_project_deadline_per
 import services.databox_productivity_metrics_sync.get_today_distractions_frequency as GetTodayDistractionsFrequency
 import utilities.datetime as DatetimeHelper
 import constants.instagantt
-from utilities.databox_client import getDataboxClient
-from utilities.instagantt_client import getInstaganttClient
+from utilities.logger import getLogger
+from utilities.api_clients.databox_client import getDataboxClient
+from utilities.api_clients.instagantt_client import getInstaganttClient
 from models.databox import Metric
 
 
+logTagSyncDataboxProductivityMetric = "[Sync Databox Productivity Metric]"
+
+
 def Run():
-    databoxClient = getDataboxClient('jeh48rgr8k7cikj3awtkg')
-    return databoxClient.insert_all(buildDataboxSyncData())
+    try:
+        databoxClient = getDataboxClient('jeh48rgr8k7cikj3awtkg')
+        response = databoxClient.insert_all(buildDataboxSyncData())
+    except Exception as error:
+        getLogger().error(
+            logTagSyncDataboxProductivityMetric + " failed to sync data to Databox productivity's metrics",
+            error
+        )
+        raise error
+    return response
 
 
 def buildDataboxSyncData():

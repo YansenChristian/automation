@@ -9,7 +9,7 @@ def Run(projectId, tasks):
 
     filteredTasks = list(filter(lambda task: filterTask(task, projectId), tasks))
     totalTasks = len(filteredTasks)
-    completedTasks = list(filter(lambda task: task['completed'] == True, filteredTasks))
+    completedTasks = list(filter(lambda task: task['completed'] is True, filteredTasks))
     totalCompletedTasks = len(completedTasks)
 
     if totalTasks == 0:

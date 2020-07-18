@@ -1,13 +1,25 @@
 import utilities.datetime as DatetimeHelper
-from utilities.zapier_storage_client import getZapierStorageClient
-from utilities.asana_client import getAsanaClient
+from utilities.logger import getLogger
+from utilities.api_clients.zapier_storage_client import getZapierStorageClient
+from utilities.api_clients.asana_client import getAsanaClient
+
+
+logTagMoveTodayTasksAcrossProjects = "[Move Today Task Across Projects]"
 
 
 def moveTodayTasksAcrossProjects(sourceProjectId, destinationProjectId, destinationSectionId):
 	results = []
 	asanaClient = getAsanaClient()
-	todayTasks = asanaClient.getTasksFromProject(sourceProjectId, True)
-	def prepareBatchActionsForAddingProjectToTasks(todayTasks, destinationProjectId ,destinationSectionId):
+	try:
+		todayTasks = asanaClient.getTasksFromProject(sourceProjectId, True)
+	except Exception as error:
+		getLogger().error(
+			logTagMoveTodayTasksAcrossProjects + " failed to get tasks from project {:s} in Asana".format(sourceProjectId),
+			error
+		)
+		return results
+
+	def prepareBatchActionsForAddingProjectToTasks(todayTasks, destinationProjectId, destinationSectionId):
 		actions = []
 		for task in todayTasks:
 			actions.append({
@@ -26,5 +38,13 @@ def moveTodayTasksAcrossProjects(sourceProjectId, destinationProjectId, destinat
 	zapierStorageClient = getZapierStorageClient()
 	todayDateString = DatetimeHelper.getTodayDateInStringFormat("%Y-%m-%d")
 	todayTaskGids = [task['gid'] for task in todayTasks]
-	results.append(zapierStorageClient.appendUniqueValuesToKey(todayDateString + "[TotalTasks]", todayTaskGids))
+	try:
+		results.append(zapierStorageClient.appendUniqueValuesToKey(todayDateString + "[TotalTasks]", todayTaskGids))
+	except Exception as error:
+		getLogger().error(
+			logTagMoveTodayTasksAcrossProjects + " failed to update 'TotalTasks' counter in Zapier Storage",
+			error
+		)
+		return results
+
 	return results

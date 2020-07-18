@@ -1,5 +1,5 @@
 import utilities.http_response as response
-from utilities.instagantt_client import getInstaganttClient
+from utilities.api_clients.instagantt_client import getInstaganttClient
 from flask_restful import Resource
 
 

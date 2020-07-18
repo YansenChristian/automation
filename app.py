@@ -1,4 +1,6 @@
+import os
 from flask import Flask, jsonify
+from utilities.logger import getLogger
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -21,7 +23,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-
 # ================== REGISTER API ROUTES =================== #
 
 from routes.health_check_blueprint import HealthCheckBlueprint
@@ -41,4 +42,5 @@ app.register_blueprint(InstaganttBlueprint)
 # ======================= RUN SERVER ======================= #
 
 if __name__ == '__main__':
-    app.run(threaded=True, port=8000)
+    getLogger()
+    app.run(threaded=True, port=os.getenv("APP_PORT"))

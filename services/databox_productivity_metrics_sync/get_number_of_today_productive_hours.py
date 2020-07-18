@@ -1,7 +1,11 @@
 import utilities.datetime as DatetimeHelper
 import constants.google_calendar
 from datetime import datetime
-from utilities.google_calendar_client import getGoogleCalendarClient
+from utilities.logger import getLogger
+from utilities.api_clients.google_calendar_client import getGoogleCalendarClient
+
+
+logTagGetNumberOfTodayProductiveHours = "[Get Number of Today Productive Hours]"
 
 
 def Run():
@@ -22,8 +26,17 @@ def getDailyTasksFromGoogleCalendar():
     endOfDayPostfix = "T23:59:59" + asiaJakartaTimeZone
 
     googleCalendarClient = getGoogleCalendarClient()
-    return googleCalendarClient.getEventsForDatetimeRange(
-        constants.google_calendar.CALENDARS['Daily Tasks']['id'],
-        todayDate + beginningOfDayPostfix,
-        todayDate + endOfDayPostfix
-    )['items']
+    response = None
+    try:
+        response = googleCalendarClient.getEventsForDatetimeRange(
+            constants.google_calendar.CALENDARS['Daily Tasks']['id'],
+            todayDate + beginningOfDayPostfix,
+            todayDate + endOfDayPostfix
+        )
+    except Exception as error:
+        getLogger().error(
+            logTagGetNumberOfTodayProductiveHours + " failed to update 'TotalTasks' counter in Zapier Storage",
+            error
+        )
+
+    return [] if response is None else response['items']

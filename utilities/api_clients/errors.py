@@ -1,0 +1,3 @@
+
+class MissingKeyInResponseBodyException(Exception):
+    pass

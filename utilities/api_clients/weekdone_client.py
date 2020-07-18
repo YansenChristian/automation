@@ -1,5 +1,5 @@
 import os
-from utilities.api_call import ApiCallHelper
+import utilities.api_clients.api_call as ApiCallUtil
 
 
 class WeekdoneClient:
@@ -9,8 +9,8 @@ class WeekdoneClient:
     oauthClient = None
 
     def __init__(self):
-        self.oauthClient = ApiCallHelper(self.oauthUrl, {})
-        self.apiClient = ApiCallHelper(self.apiUrl, {})
+        self.oauthClient = ApiCallUtil.ApiCallHelper(self.oauthUrl, {})
+        self.apiClient = ApiCallUtil.ApiCallHelper(self.apiUrl, {})
         self.__refreshAccessToken()
 
     def __refreshAccessToken(self):
@@ -23,13 +23,11 @@ class WeekdoneClient:
             'redirect_uri': os.getenv('WEEKDONE_CLIENT_SECRET'),
         }
 
-        result = self.oauthClient.sendPost(uri, body)
-        if result is None:
-            raise Exception("Failed to refresh weekdone's access token")
+        response = self.oauthClient.sendPost(uri, body)
+        responseData = {} if not ApiCallUtil.isJson(response.content) else response.json()
 
-        responseData = result.json()
         if ('status' in responseData and responseData['status'] == "error") or ('access_token' not in responseData):
-            raise Exception(responseData)
+            raise Exception(responseData['message'])
         self.apiClient.headers['Authorization'] = responseData['access_token']
 
     def updateKeyResultProgress(self, objectiveId, keyResultId, progress):
@@ -41,13 +39,10 @@ class WeekdoneClient:
             'progress': int(progress)
         }
 
-        result = self.apiClient.sendPost(uri, body, queryString)
-        if result is None:
-            raise Exception("Failed to refresh weekdone's access token")
-
-        responseData = result.json()
+        response = self.apiClient.sendPost(uri, body, queryString)
+        responseData = {} if not ApiCallUtil.isJson(response.content) else response.json()
         if 'status' in responseData and responseData['status'] == "error":
-            raise Exception(responseData)
+            raise Exception(responseData['message'])
         return responseData
 
 

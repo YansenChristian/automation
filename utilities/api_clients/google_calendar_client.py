@@ -1,5 +1,5 @@
 import os
-from utilities.api_call import ApiCallHelper
+import utilities.api_clients.api_call as ApiCallUtil
 
 
 class GoogleCalendarClient:
@@ -9,8 +9,8 @@ class GoogleCalendarClient:
     oauthClient = None
 
     def __init__(self):
-        self.oauthClient = ApiCallHelper(self.oauthUrl, {})
-        self.apiClient = ApiCallHelper(self.apiUrl, {})
+        self.oauthClient = ApiCallUtil.ApiCallHelper(self.oauthUrl, {})
+        self.apiClient = ApiCallUtil.ApiCallHelper(self.apiUrl, {})
         self.__refreshAccessToken()
 
     def __refreshAccessToken(self):
@@ -22,13 +22,15 @@ class GoogleCalendarClient:
             'client_secret': os.getenv("GOOGLE_CLIENT_SECRET"),
         }
 
-        result = self.oauthClient.sendPost(uri, {}, queryString)
-        if result is None:
-            raise Exception("Failed to refresh google calendar's access token")
+        response = self.oauthClient.sendPost(uri, {}, queryString)
+        responseData = {} if not ApiCallUtil.isJson(response.content) else response.json()
 
-        responseData = result.json()
-        if ('error' in responseData) or ('access_token' not in responseData):
-            raise Exception(responseData)
+        if 'access_token' not in responseData:
+            raise Exception("invalid response structure: {:s}".format(str(response.content)))
+
+        if 'error' in responseData:
+            raise Exception(responseData['error'])
+
         self.apiClient.headers['Authorization'] = "Bearer " + responseData['access_token']
 
     def getEventsForDatetimeRange(self, calendarId, startDatetime, endDatetime):
@@ -38,13 +40,10 @@ class GoogleCalendarClient:
             'timeMax': endDatetime
         }
 
-        result = self.apiClient.sendGet(uri, queryString)
-        if result is None:
-            return {}
-
-        responseData = result.json()
+        response = self.apiClient.sendGet(uri, queryString)
+        responseData = {} if not ApiCallUtil.isJson(response.content) else response.json()
         if 'error' in responseData:
-            raise Exception(responseData)
+            raise Exception(responseData['error'])
         return responseData
 
 

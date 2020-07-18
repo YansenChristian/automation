@@ -1,6 +1,6 @@
 import utilities.http_response as response
 import utilities.datetime as DatetimeHelper
-from utilities.zapier_storage_client import getZapierStorageClient
+from utilities.api_clients.zapier_storage_client import getZapierStorageClient
 from flask_restful import Resource, reqparse
 
 

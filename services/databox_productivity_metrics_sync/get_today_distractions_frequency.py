@@ -1,6 +1,10 @@
 import utilities.datetime as DatetimeHelper
 import constants.google_calendar
-from utilities.google_calendar_client import getGoogleCalendarClient
+from utilities.logger import getLogger
+from utilities.api_clients.google_calendar_client import getGoogleCalendarClient
+
+
+logTagGetTodayDistractionFrequency = "[Get Today Distraction Frequency]"
 
 
 def Run():
@@ -11,10 +15,16 @@ def Run():
     endOfDayPostfix = "T23:59:59" + asiaJakartaTimeZone
 
     googleCalendarClient = getGoogleCalendarClient()
-    result = googleCalendarClient.getEventsForDatetimeRange(
-        constants.google_calendar.CALENDARS['Distractions']['id'],
-        todayDate + beginningOfDayPostfix,
-        todayDate + endOfDayPostfix
-    )
+    try:
+        result = googleCalendarClient.getEventsForDatetimeRange(
+            constants.google_calendar.CALENDARS['Distractions']['id'],
+            todayDate + beginningOfDayPostfix,
+            todayDate + endOfDayPostfix
+        )
+    except Exception as error:
+        getLogger().error(
+            logTagGetTodayDistractionFrequency + " failed to update 'TotalTasks' counter in Zapier Storage",
+            error
+        )
 
     return len(result['items'])
