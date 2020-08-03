@@ -22,7 +22,7 @@ def Run(tasks):
 
             eventStart = models.google_calendar.EventDate(dateTime=startDatetime.isoformat() + '+07:00', timeZone="Asia/Jakarta")
             eventEnd = models.google_calendar.EventDate(dateTime=endDatetime.isoformat() + '+07:00', timeZone="Asia/Jakarta")
-            eventReminder = models.google_calendar.EventReminder(method='popup', minutes=5)
+            eventReminder = models.google_calendar.EventReminder(method='popup', minutes=0)
             event = models.google_calendar.Event(
                 summary=task.name,
                 start=eventStart,
