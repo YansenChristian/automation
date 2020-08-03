@@ -31,7 +31,7 @@ class InstaganttClient:
         self.headers['Cookie'] = connectSId[:connectSId.find(';')]
         return self.headers['Cookie']
 
-    def getAllTasks(self, withCompletedTask = False):
+    def getAll(self, withCompletedTask = False):
         uri = "/projects/" + constants.instagantt.CONNECTIONS['Overall']['gid'] + "/tasks"
         queryString = {}
         if not withCompletedTask:

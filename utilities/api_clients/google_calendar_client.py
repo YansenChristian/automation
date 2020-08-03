@@ -1,3 +1,4 @@
+import json
 import os
 import utilities.api_clients.api_call as ApiCallUtil
 
@@ -41,6 +42,15 @@ class GoogleCalendarClient:
         }
 
         response = self.apiClient.sendGet(uri, queryString)
+        responseData = {} if not ApiCallUtil.isJson(response.content) else response.json()
+        if 'error' in responseData:
+            raise Exception(responseData['error'])
+        return responseData
+
+    def createEvent(self, calendarId, event):
+        uri = "/calendar/v3/calendars/" + calendarId + "/events"
+
+        response = self.apiClient.sendPost(uri, json.dumps(event.toDictionary()))
         responseData = {} if not ApiCallUtil.isJson(response.content) else response.json()
         if 'error' in responseData:
             raise Exception(responseData['error'])

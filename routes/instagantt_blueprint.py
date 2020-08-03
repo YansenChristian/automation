@@ -9,3 +9,4 @@ InstaganttApiBlueprint = Api(InstaganttBlueprint)
 
 import controllers.instagantt as InstaganttController
 InstaganttApiBlueprint.add_resource(InstaganttController.GetAllTasks, "/tasks")
+InstaganttApiBlueprint.add_resource(InstaganttController.SyncToAsanaGCalendar, "/sync-to-asana-gcalendar")

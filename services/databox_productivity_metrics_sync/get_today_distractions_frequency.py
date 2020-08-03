@@ -21,10 +21,14 @@ def Run():
             todayDate + beginningOfDayPostfix,
             todayDate + endOfDayPostfix
         )
+        if 'items' not in result:
+            raise Exception("invalid response structure")
+
     except Exception as error:
         getLogger().error(
-            logTagGetTodayDistractionFrequency + " failed to update 'TotalTasks' counter in Zapier Storage",
+            logTagGetTodayDistractionFrequency + " failed to get events 'Distractions' from Google Calendar",
             error
         )
+        raise error
 
     return len(result['items'])

@@ -1,7 +1,8 @@
+import os
+
 import services.databox_productivity_metrics_sync.get_number_of_today_productive_hours as GetNumberOfTodayProductiveHours
 import services.databox_productivity_metrics_sync.get_today_project_progress_percentage as GetTodayProjectProgressPercentage
 import services.databox_productivity_metrics_sync.get_today_project_deadline_percentage as GetTodayProjectDeadlinePercentage
-import services.databox_productivity_metrics_sync.get_today_distractions_frequency as GetTodayDistractionsFrequency
 import utilities.datetime as DatetimeHelper
 import constants.instagantt
 from utilities.logger import getLogger
@@ -15,7 +16,7 @@ logTagSyncDataboxProductivityMetric = "[Sync Databox Productivity Metric]"
 
 def Run():
     try:
-        databoxClient = getDataboxClient('jeh48rgr8k7cikj3awtkg')
+        databoxClient = getDataboxClient(os.getenv("DATABOX_SECRET"))
         response = databoxClient.insert_all(buildDataboxSyncData())
     except Exception as error:
         getLogger().error(
@@ -35,11 +36,10 @@ def buildDataboxSyncData():
 
     syncData = [
         Metric("productive.hours", GetNumberOfTodayProductiveHours.Run(), "hours").toDictionary(),
-        Metric("distraction.frequency", GetTodayDistractionsFrequency.Run(), "times").toDictionary(),
     ]
 
     instaganttClient = getInstaganttClient()
-    tasks = instaganttClient.getAllTasks(True)
+    tasks = instaganttClient.getAll(True)
     for project in projects:
         percentageFormat = "{nominal:.0f}"
         progressPercentage = percentageFormat.format(

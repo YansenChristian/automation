@@ -1,6 +1,6 @@
 import utilities.http_response as response
 import constants.asana
-import services.asana as AsanaService
+import services.common.asana as AsanaService
 from flask_restful import Resource
 
 

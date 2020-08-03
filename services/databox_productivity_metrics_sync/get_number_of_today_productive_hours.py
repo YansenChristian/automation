@@ -26,7 +26,6 @@ def getDailyTasksFromGoogleCalendar():
     endOfDayPostfix = "T23:59:59" + asiaJakartaTimeZone
 
     googleCalendarClient = getGoogleCalendarClient()
-    response = None
     try:
         response = googleCalendarClient.getEventsForDatetimeRange(
             constants.google_calendar.CALENDARS['Daily Tasks']['id'],
@@ -38,5 +37,6 @@ def getDailyTasksFromGoogleCalendar():
             logTagGetNumberOfTodayProductiveHours + " failed to update 'TotalTasks' counter in Zapier Storage",
             error
         )
+        raise error
 
     return [] if response is None else response['items']
