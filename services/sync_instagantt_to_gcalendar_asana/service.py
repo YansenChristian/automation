@@ -13,5 +13,5 @@ def Run():
 
     return {
         'Move Tasks To Overview In Asana': MoveTasksToOverviewInAsana.Run(todayTasks),
-        'Create Daily Tasks Event Foreach Tasks In GCalendar': CreateDailyTasksEventForEachTasksInGCalendar.Run(todayTasks)
+        # 'Create Daily Tasks Event Foreach Tasks In GCalendar': CreateDailyTasksEventForEachTasksInGCalendar.Run(todayTasks)
     }
