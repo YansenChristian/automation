@@ -1,5 +1,4 @@
 import services.sync_instagantt_to_gcalendar_asana.move_tasks_to_overview_in_asana as MoveTasksToOverviewInAsana
-import services.sync_instagantt_to_gcalendar_asana.create_daily_tasks_event_for_each_tasks_in_gcalendar as CreateDailyTasksEventForEachTasksInGCalendar
 import services.common.instagantt as InstaganttCommonService
 import datetime
 

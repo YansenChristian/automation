@@ -8,4 +8,4 @@ AsanaApiBlueprint = Api(AsanaBlueprint)
 
 
 import controllers.asana as AsanaController
-AsanaApiBlueprint.add_resource(AsanaController.MoveTodayRoutinityTasksToOverview, "/move-routinity-to-overview")
+AsanaApiBlueprint.add_resource(AsanaController.MoveTodayRoutinityTasksToInBasket, "/move-routinity-to-in-basket")
