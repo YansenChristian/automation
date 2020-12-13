@@ -1,8 +1,11 @@
 import datetime
+import pytz
 
 
 def getTodayDateInStringFormat(dateTimeFormat):
-	nowDateTime = datetime.datetime.now()
+	nowDateTime = datetime.datetime.now(
+		pytz.timezone('Asia/Jakarta')
+	)
 	return nowDateTime.strftime(dateTimeFormat)
 
 
